@@ -184,7 +184,6 @@ int main() {
     std::cin.tie(nullptr);
 
     long long N;
-    int num_threads;
 
     std::cout << "Ingrese N (>= 10000000): ";
     // Prompt for N (>= 10,000,000)
@@ -194,20 +193,10 @@ int main() {
         return 1;
     }
 
-    std::cout << "Ingrese la cantidad de hilos (>=1): ";
-    // Prompt for number of threads (>=1)
-    if (!(std::cin >> num_threads) || num_threads < 1) {
-        std::cerr << "Entrada inválida para hilos.\n";
-        // Invalid input for threads.
-        return 1;
-    }
-
-    int hw = (int)std::thread::hardware_concurrency();
-    if (hw > 0) num_threads = std::min(num_threads, std::max(1, hw * 2));
-    // Cap threads to a reasonable multiple of hardware concurrency.
-    // Limita los hilos a un múltiplo razonable de la concurrencia de hardware.
-
-    std::cout << "N=" << N << "  hilos=" << num_threads << "\n";
+    // Usar todos los hilos disponibles del hardware
+    unsigned int hw = std::thread::hardware_concurrency();
+    int num_threads = hw ? static_cast<int>(hw) : 1;
+    std::cout << "N=" << N << "  hilos=" << num_threads << " (todos los disponibles)\n";
 
     // Secuencial
     // Sequential
